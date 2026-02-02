@@ -1,10 +1,6 @@
 import { describe, it } from "vitest";
-import {
-  PexelsProvider,
-  RandomImage,
-  UnsplashProvider,
-} from "@nghiavuive/random-image";
 import dotenv from "dotenv";
+import { RandomImage, UnsplashProvider, PexelsProvider } from "../src";
 dotenv.config();
 
 describe("UnsplashProvider", () => {
