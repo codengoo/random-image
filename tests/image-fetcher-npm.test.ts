@@ -8,6 +8,8 @@ import {
 } from "../src";
 dotenv.config();
 
+console.log(process.env);
+
 describe("UnsplashProvider", () => {
   it("fetch with unsplash", async () => {
     const unsplash = new UnsplashProvider(process.env.UNSPLASH_KEY || "");
