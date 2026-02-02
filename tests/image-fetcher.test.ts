@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { UnsplashProvider } from './providers/unsplash';
-import { PexelsProvider } from './providers/pexels';
-import { RandomImage } from './image-fetcher';
+import { UnsplashProvider } from '../src/providers/unsplash';
+import { PexelsProvider } from '../src/providers/pexels';
+import { RandomImage } from '../src/image-fetcher';
 
 // Mock global fetch
 const fetchMock = vi.fn();
