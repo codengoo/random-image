@@ -26,6 +26,10 @@ jobs:
 
       - name: Run tests
         run: npm test
+        env:
+          UNSPLASH_KEY: ${{ secrets.UNSPLASH_KEY }}
+          PEXELS_KEY: ${{ secrets.PEXELS_KEY }}
+          PIXABAY_KEY: ${{ secrets.PIXABAY_KEY }}
 
       - name: Build
         run: npm run build
