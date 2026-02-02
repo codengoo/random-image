@@ -3,6 +3,7 @@ export interface ImageOptions {
   height?: number;
   quality?: number; // 0-100
   query?: string;
+  orientation?: "landscape" | "portrait";
 }
 
 export interface ImageResult {
