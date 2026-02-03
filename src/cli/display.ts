@@ -51,7 +51,6 @@ export function displayImageInfo(image: {
 
   console.log('\n' + boxen(content, {
     padding: 1,
-    margin: 1,
     borderStyle: 'round',
     borderColor: 'green',
     title: '🖼️  Image Details',
@@ -67,7 +66,6 @@ export function displayDownloadSuccess(filePath: string): void {
   
   console.log('\n' + boxen(content, {
     padding: 1,
-    margin: 1,
     borderStyle: 'round',
     borderColor: 'blue',
     title: '💾 Download Complete',
