@@ -18,3 +18,9 @@ export interface ImageResult {
 export interface ImageProvider {
   fetchRandomImage(options: ImageOptions): Promise<ImageResult>;
 }
+
+export interface DownloadOptions {
+  filename?: string;
+  overwrite?: boolean;
+  keepOriginalName?: boolean;
+}
