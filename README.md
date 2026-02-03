@@ -1,6 +1,6 @@
 # random-image
 
-A generic utility library to fetch random images from various providers like Unsplash and Pexels, with built-in download capabilities.
+A generic utility library to fetch random images from various providers like Unsplash and Pexels, with built-in download capabilities and CLI support.
 
 ## Installation
 
@@ -8,7 +8,99 @@ A generic utility library to fetch random images from various providers like Uns
 npm install @nghiavuive/random-image
 ```
 
-## Usage
+## CLI Usage
+
+You can use the CLI without installation via `npx`:
+
+```bash
+npx @nghiavuive/random-image fetch --query "nature" --download
+```
+
+Or install globally:
+
+```bash
+npm install -g @nghiavuive/random-image
+random-image fetch --query "mountains" --download
+```
+
+### CLI Setup
+
+Set environment variables for the providers you want to use:
+
+```bash
+export UNSPLASH_KEY="your_unsplash_access_key"
+export PEXELS_KEY="your_pexels_api_key"
+export PIXABAY_KEY="your_pixabay_api_key"
+```
+
+Or create a `.env` file in your project:
+
+```env
+UNSPLASH_KEY=your_unsplash_access_key
+PEXELS_KEY=your_pexels_api_key
+PIXABAY_KEY=your_pixabay_api_key
+```
+
+### CLI Commands
+
+#### Fetch Command
+
+```bash
+# Basic usage - uses random provider from available API keys
+random-image fetch
+
+# Fetch with search query
+random-image fetch --query "nature"
+
+# Fetch and download
+random-image fetch --query "mountains" --download
+
+# Specify provider
+random-image fetch --provider unsplash --query "ocean"
+
+# Custom dimensions
+random-image fetch --width 1920 --height 1080 --query "sunset"
+
+# Download to custom directory
+random-image fetch --query "cats" --download ./my-images
+
+# Download with custom filename
+random-image fetch --query "dogs" --download --filename "my-dog.jpg"
+
+# Download with overwrite
+random-image fetch --download --overwrite
+
+# Generate random UUID filename
+random-image fetch --download --no-keep-original-name
+
+# Full example with all options
+random-image fetch \
+  --provider pexels \
+  --query "abstract art" \
+  --width 2560 \
+  --height 1440 \
+  --orientation landscape \
+  --download ./wallpapers \
+  --filename "wallpaper.jpg" \
+  --overwrite
+```
+
+#### CLI Flags
+
+- `-q, --query <search>`: Search query for the image
+- `-w, --width <number>`: Width of the image
+- `-h, --height <number>`: Height of the image
+- `--quality <number>`: Quality of the image (0-100)
+- `--orientation <type>`: Image orientation (`landscape` or `portrait`)
+- `-p, --provider <name>`: Provider to use (`unsplash`, `pexels`, `pixabay`, or `random`)
+- `-d, --download [path]`: Download the image (default: `./downloads`)
+- `--filename <name>`: Custom filename for downloaded image
+- `--overwrite`: Overwrite existing files
+- `--no-keep-original-name`: Generate random UUID filename instead of keeping original
+
+**Random Provider Mode**: If you don't specify `--provider` or use `--provider random`, the CLI will randomly select from providers that have API keys configured. This is useful for distributing requests across multiple services.
+
+## Programmatic Usage
 
 You need to obtain API keys from the respective providers:
 - [Unsplash Developers](https://unsplash.com/developers)
@@ -149,8 +241,16 @@ Result object containing image information:
 
 ## Features
 
+### CLI Features
+- ✅ Command-line interface for quick image fetching
+- ✅ Random provider selection when multiple API keys are available
+- ✅ Environment variable support for API keys
+- ✅ Direct download from command line
+- ✅ All library features available via CLI flags
+
+### Library Features
+
 ### Download Functionality
-- ✅ Automatic directory creation
 - ✅ Flexible filename options:
   - Custom filename
   - Keep original filename from URL (default)

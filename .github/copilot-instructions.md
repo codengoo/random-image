@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-A TypeScript library for fetching random images from multiple providers (Unsplash, Pexels, Pixabay) with built-in download capabilities. Dual-format NPM package supporting both CommonJS and ESM.
+A TypeScript library for fetching random images from multiple providers (Unsplash, Pexels, Pixabay) with built-in download capabilities and CLI support. Dual-format NPM package supporting both CommonJS and ESM, with a command-line interface for quick image fetching.
 
 ## Build, Test, and Lint Commands
 
@@ -11,6 +11,10 @@ A TypeScript library for fetching random images from multiple providers (Unsplas
 npm run build        # Build with tsup (outputs to dist/)
 npm run dev          # Watch mode for development
 ```
+
+The build process creates:
+- Library files: `dist/index.js` (CJS), `dist/index.mjs` (ESM), `dist/index.d.ts` (types)
+- CLI binary: `dist/cli.js` (ESM with shebang)
 
 ### Test
 ```bash
@@ -22,6 +26,12 @@ npx vitest <file>    # Run specific test file
 ### Lint
 ```bash
 npm run lint         # Type check with tsc --noEmit (no output files)
+```
+
+### CLI Usage (Local Testing)
+```bash
+npm run build        # Build first
+node dist/cli.js fetch --query "nature" --download
 ```
 
 ## Architecture
@@ -38,12 +48,20 @@ Each provider:
 2. Transforms service-specific API responses into the common `ImageResult` format
 3. Handles URL construction with size/quality parameters specific to that service
 
+### CLI Architecture
+- **Entry point**: `src/cli.ts` - Built as standalone ESM file with Node.js shebang
+- **Argument parsing**: Uses `commander` library for CLI flags and commands
+- **Provider selection**: Supports explicit provider choice or random selection from available API keys
+- **Environment variables**: Reads API keys from `UNSPLASH_KEY`, `PEXELS_KEY`, `PIXABAY_KEY`
+- **Random mode**: When `--provider random` or no provider specified, randomly selects from providers with configured API keys
+
 ### File Structure
 ```
 src/
   ├── index.ts                # Exports all public APIs
   ├── types.ts                # Interface definitions (shared contracts)
   ├── image-fetcher.ts        # RandomImage class (core functionality)
+  ├── cli.ts                  # CLI entry point with commander setup
   └── providers/              # Service-specific implementations
       ├── unsplash.ts         # Unsplash API integration
       ├── pexels.ts           # Pexels API integration
@@ -60,9 +78,10 @@ The `download()` method in `RandomImage`:
 ## Key Conventions
 
 ### API Key Handling
-- Providers require API keys passed to constructors (not exposed in public interface)
-- Tests use `.env` file with `dotenv` for credentials
-- Environment variables: `UNSPLASH_KEY`, `PEXELS_KEY`, `PIXABAY_KEY`
+- **Library**: Providers require API keys passed to constructors (not exposed in public interface)
+- **CLI**: API keys read from environment variables (`UNSPLASH_KEY`, `PEXELS_KEY`, `PIXABAY_KEY`)
+- **Tests**: Use `.env` file with `dotenv` for credentials
+- **Random provider selection**: CLI checks which API keys are available and randomly selects one
 
 ### Provider-Specific Randomization
 Each provider handles "random" differently:
@@ -89,10 +108,22 @@ Providers append size/quality params to image URLs differently:
 ### Package Distribution
 - Built as dual-format package (CJS + ESM) via tsup
 - Entry point: `src/index.ts`
-- Outputs: `dist/index.js` (CJS), `dist/index.mjs` (ESM), `dist/index.d.ts` (types)
+- CLI entry point: `src/cli.ts` (built separately with shebang banner)
+- Outputs: 
+  - Library: `dist/index.js` (CJS), `dist/index.mjs` (ESM), `dist/index.d.ts` (types)
+  - CLI: `dist/cli.js` (ESM with `#!/usr/bin/env node`)
 - Only `dist/` folder is published to npm (see `files` in package.json)
+- `bin` field in package.json points to `dist/cli.js` for `npx` usage
+
+### CLI Conventions
+- All flags mirror library options (e.g., `--query` → `options.query`)
+- Download path defaults to `./downloads` if `--download` flag present without value
+- `--provider random` or omitting `--provider` enables random provider selection
+- Exit codes: 0 for success, 1 for errors
+- User-friendly console output with ✓ symbols for success messages
 
 ## Error Handling
 - Download method throws on existing files unless `overwrite: true`
 - Providers throw on no results found
 - Partial downloads are cleaned up automatically on stream errors
+- CLI displays user-friendly error messages and exits with code 1
