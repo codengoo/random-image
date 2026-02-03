@@ -1,6 +1,6 @@
 {
   "name": "@nghiavuive/random-image",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Fetch random images from Unsplash, Pexels, and Pixabay with CLI support",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -38,8 +38,11 @@
   },
   "dependencies": {
     "axios": "^1.13.4",
+    "boxen": "^8.0.1",
+    "chalk": "^5.6.2",
     "commander": "^12.1.0",
     "dotenv": "^17.2.3",
+    "ora": "^9.1.0",
     "uuid": "^13.0.0"
   },
   "bin": {
